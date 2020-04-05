@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Controller responsible for rendering {@link Customer} related views
@@ -51,14 +52,29 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/delete/{id}")
-    public String delete(Model model,
-                         @PathVariable Integer id) {
+    public String delete(@PathVariable Integer id) {
 
         customerService.deleteCustomer(id);
         return "redirect:/";
     }
 
-    public String create(Model model, ) {}
+    @RequestMapping(method = RequestMethod.GET, path = "/create")
+    public String create(Model model) {
+
+        Customer customer = new Customer();
+        model.addAttribute("customer", customer);
+
+        return "create-customer";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = {"/add"})
+    public String saveCustomer(Customer customer, RedirectAttributes redirectAttributes) {
+
+        Customer savedCustomer = customerService.save(customer);
+        redirectAttributes.addFlashAttribute("lastAction", "Added customer successfully!");
+        return "redirect:/customer/list";
+
+    }
 
 
 }
