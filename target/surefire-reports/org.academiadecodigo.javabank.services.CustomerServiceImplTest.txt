@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.academiadecodigo.javabank.services.CustomerServiceImplTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.384 sec - in org.academiadecodigo.javabank.services.CustomerServiceImplTest

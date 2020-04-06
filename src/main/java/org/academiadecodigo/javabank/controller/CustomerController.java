@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
-
 /**
  * Controller responsible for rendering {@link Customer} related views
  */
@@ -64,7 +62,8 @@ public class CustomerController {
     @RequestMapping(method = RequestMethod.GET, path = "/create")
     public String create(Model model, @ModelAttribute("customer")  Customer customer) {
 
-        Customer newCustomer = customerService.create(customer);
+//        Customer newCustomer = customerService.create(customer);
+        Customer newCustomer = new Customer();
         model.addAttribute("customer", newCustomer);
 
         return "create-customer";
@@ -97,7 +96,7 @@ public class CustomerController {
 
     }
 
-    @RequestMapping(method = PUT, value = "/save")
+    @RequestMapping(method = RequestMethod.PUT, value = "/save")
     public String saveUpdate(@ModelAttribute("customer") Customer customer) {
 
         customerService.update(customer);

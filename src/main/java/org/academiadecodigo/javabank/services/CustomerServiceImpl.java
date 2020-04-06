@@ -100,7 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer create(Customer customer) {
 
-        return customerDao.saveOrUpdate(new Customer());
+        return customerDao.saveOrUpdate(customer);
     }
 
     @Transactional

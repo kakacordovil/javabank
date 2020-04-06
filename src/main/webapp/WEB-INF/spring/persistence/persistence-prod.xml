@@ -11,9 +11,9 @@
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 
         <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://${prod.jdbc.host}/${prod.jdbc.database}?useSSL=false"/>
-        <property name="user" value="${prod.jdbc.username}"/>
-        <property name="password" value="${prod.jdbc.password}"/>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/javabank?useSSL=false&amp;serverTimezone=UTC"/>
+        <property name="user" value="kakacordovil"/>
+        <property name="password" value=""/>
 
         <!-- c3p0 database connection pool management properties -->
         <property name="minPoolSize" value="${pool.min}"/>
