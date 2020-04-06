@@ -98,8 +98,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
+    public Customer create(Customer customer) {
+
+        return customerDao.saveOrUpdate(new Customer());
+    }
+
+    @Transactional
+    @Override
     public Customer save(Customer customer) {
 
         return customerDao.saveOrUpdate(customer);
+    }
+
+    @Transactional
+    @Override
+    public void update(Customer customer) {
+
+        customerDao.saveOrUpdate(customer);
     }
 }

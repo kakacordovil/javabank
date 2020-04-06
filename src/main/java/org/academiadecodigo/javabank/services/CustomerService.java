@@ -53,4 +53,8 @@ public interface CustomerService {
     void deleteCustomer(Integer id);
 
     Customer save(Customer customer);
+
+    void update(Customer customer);
+
+    Customer create(Customer customer);
 }

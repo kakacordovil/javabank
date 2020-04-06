@@ -5,10 +5,13 @@ import org.academiadecodigo.javabank.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 /**
  * Controller responsible for rendering {@link Customer} related views
@@ -59,10 +62,10 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/create")
-    public String create(Model model) {
+    public String create(Model model, @ModelAttribute("customer")  Customer customer) {
 
-        Customer customer = new Customer();
-        model.addAttribute("customer", customer);
+        Customer newCustomer = customerService.create(customer);
+        model.addAttribute("customer", newCustomer);
 
         return "create-customer";
     }
@@ -74,6 +77,31 @@ public class CustomerController {
         redirectAttributes.addFlashAttribute("lastAction", "Added customer successfully!");
         return "redirect:/customer/list";
 
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/update/{id}")
+    public String update(Model model, @PathVariable Integer id) {
+
+        Customer customer = customerService.get(id);
+
+        customer.setFirstName(customer.getFirstName());
+        customer.setLastName(customer.getLastName());
+        customer.setEmail(customer.getEmail());
+        customer.setPhone(customer.getPhone());
+
+        customerService.save(customer);
+
+        model.addAttribute("customer", customer);
+
+        return "update-customer";
+
+    }
+
+    @RequestMapping(method = PUT, value = "/save")
+    public String saveUpdate(@ModelAttribute("customer") Customer customer) {
+
+        customerService.update(customer);
+        return "redirect:/customer/list";
     }
 
 

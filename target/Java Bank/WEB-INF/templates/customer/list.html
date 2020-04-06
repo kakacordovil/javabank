@@ -38,6 +38,10 @@
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
+        .button-update:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
         body {
         background-color: rgba(230, 255, 255, 0.2);
         }
@@ -55,6 +59,9 @@
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Show</th>
+                <th>Delete</th>
+                <th>Update</th>
             </tr>
             <tr th:each="customer : ${customers}">
                 <td th:text="${customer.id}"></td>
@@ -64,10 +71,10 @@
                 <td th:text="${customer.phone}"></td>
                 <td><a th:href="@{'show/' + ${customer.id}}"><button type="button" class="button button-view">View</button></a></td>
                 <td><a th:href="@{'delete/' + ${customer.id}}"><button type="button" class="button button-delete">Delete</button></a></td>
-
+                <td><a th:href="@{'update/' + ${customer.id}}"><button type="button" class="button button-update">Update</button></a></td>
             </tr>
         </table>
-        <a href="/javabank/customer/create"><button class="button button-test">new client </button></a>
+        <a href="/javabank/customer/create"><button class="button button-test">New client </button></a>
     </div>
 </div>
 </body>
