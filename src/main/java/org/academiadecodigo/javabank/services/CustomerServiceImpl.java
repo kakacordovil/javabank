@@ -99,6 +99,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public Customer create(Customer customer) {
+        System.out.println("KAKA-CREATE-CallingSaveOrUpdate");
 
         return customerDao.saveOrUpdate(customer);
     }
@@ -106,6 +107,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public Customer save(Customer customer) {
+        System.out.println("KAKA-SAVE-CallingSaveOrUpdate");
 
         return customerDao.saveOrUpdate(customer);
     }
@@ -113,7 +115,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public void update(Customer customer) {
-
+ System.out.println("KAKA-UPDATE-CallingSaveOrUpdate");
         customerDao.saveOrUpdate(customer);
     }
 }

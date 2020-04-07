@@ -96,7 +96,7 @@ public class CustomerController {
 
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/save")
+    @RequestMapping(method = RequestMethod.POST, value = "/save")
     public String saveUpdate(@ModelAttribute("customer") Customer customer) {
 
         customerService.update(customer);

@@ -67,6 +67,7 @@ public abstract class GenericJpaDao<T extends Model> implements Dao<T> {
      */
     @Override
     public T saveOrUpdate(T modelObject) {
+        System.out.println("AM I EVEN GETTING INVOKED");
         return em.merge(modelObject);
     }
 
