@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerDao = customerDao;
     }
 
-    //@Autowired
+    @Autowired
     public void setRecipientDao(RecipientDao recipientDao) {
         this.recipientDao = recipientDao;
     }

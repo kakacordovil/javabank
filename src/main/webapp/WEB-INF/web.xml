@@ -25,6 +25,12 @@
         <param-value>prod</param-value>
     </context-param>
 
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+
     <!--
        This is useful because current browsers typically do not
        set a character encoding even if specified in the HTML page or form
