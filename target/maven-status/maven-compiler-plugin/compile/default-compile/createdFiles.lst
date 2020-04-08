@@ -13,10 +13,10 @@ org/academiadecodigo/javabank/controller/MainController.class
 org/academiadecodigo/javabank/persistence/dao/jpa/JpaRecipientDao.class
 org/academiadecodigo/javabank/services/AccountServiceImpl.class
 org/academiadecodigo/javabank/persistence/dao/RecipientDao.class
-org/academiadecodigo/javabank/persistence/model/account/SavingsAccount.class
 org/academiadecodigo/javabank/persistence/dao/Dao.class
-org/academiadecodigo/javabank/services/CustomerServiceImpl.class
+org/academiadecodigo/javabank/persistence/model/account/SavingsAccount.class
 org/academiadecodigo/javabank/persistence/dao/jpa/JpaAccountDao.class
+org/academiadecodigo/javabank/services/CustomerServiceImpl.class
 org/academiadecodigo/javabank/persistence/model/Customer.class
 org/academiadecodigo/javabank/persistence/model/Model.class
 org/academiadecodigo/javabank/persistence/model/account/Account.class

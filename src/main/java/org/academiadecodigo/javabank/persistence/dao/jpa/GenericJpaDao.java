@@ -1,7 +1,10 @@
 package org.academiadecodigo.javabank.persistence.dao.jpa;
 
+import org.academiadecodigo.javabank.persistence.model.Customer;
 import org.academiadecodigo.javabank.persistence.model.Model;
 import org.academiadecodigo.javabank.persistence.dao.Dao;
+import org.hibernate.Session;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -67,7 +70,10 @@ public abstract class GenericJpaDao<T extends Model> implements Dao<T> {
      */
     @Override
     public T saveOrUpdate(T modelObject) {
-        return em.merge(modelObject);
+        System.out.println("In Generic Dao " + modelObject);
+
+         em.merge(modelObject);
+        return null;
     }
 
     /**

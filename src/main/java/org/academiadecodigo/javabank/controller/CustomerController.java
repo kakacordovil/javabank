@@ -82,23 +82,23 @@ public class CustomerController {
     public String update(Model model, @PathVariable Integer id) {
 
         Customer customer = customerService.get(id);
+//        customer.setFirstName(customer.getFirstName());
+//        customer.setLastName(customer.getLastName());
+//        customer.setEmail(customer.getEmail());
+//        customer.setPhone(customer.getPhone());
+//        customer.setId(id);
+       // customerService.save(customer);
+        System.out.println("-In Customer Controller Update Method: "+customer);
 
-        customer.setFirstName(customer.getFirstName());
-        customer.setLastName(customer.getLastName());
-        customer.setEmail(customer.getEmail());
-        customer.setPhone(customer.getPhone());
-
-        customerService.save(customer);
-
-        model.addAttribute("customer", customer);
+        model.addAttribute("customer",customer);
 
         return "update-customer";
 
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/save")
+    @RequestMapping(method = RequestMethod.POST, value = "/save")
     public String saveUpdate(@ModelAttribute("customer") Customer customer) {
-
+    System.out.println("-In Customer Controller: "+customer);
         customerService.update(customer);
         return "redirect:/customer/list";
     }

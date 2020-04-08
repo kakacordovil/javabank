@@ -113,6 +113,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public void update(Customer customer) {
+    System.out.println("In Update CustomerServiceImpl" + customer.getId());
+        System.out.println("In Update CustomerServiceImpl" + customer);
 
         customerDao.saveOrUpdate(customer);
     }

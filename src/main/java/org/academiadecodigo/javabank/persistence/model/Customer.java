@@ -189,7 +189,7 @@ public class Customer extends AbstractModel {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
+                ", phone='" + phone  + '\'' +
                 ", accounts=" + accounts +
                 "} " + super.toString();
     }
