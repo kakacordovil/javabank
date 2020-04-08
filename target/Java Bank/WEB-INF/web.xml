@@ -25,11 +25,11 @@
         <param-value>prod</param-value>
     </context-param>
 
-    <listener>
+    <!--listener>
         <listener-class>
             org.springframework.web.context.ContextLoaderListener
         </listener-class>
-    </listener>
+    </listener-->
 
     <!--
        This is useful because current browsers typically do not
