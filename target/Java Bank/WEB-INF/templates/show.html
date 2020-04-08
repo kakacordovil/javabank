@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <thymeleaf th:replace="header :: header" />
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="action :: action"></div>
+
+    <h2 th:text="${'Customer ' + customer.id}"></h2>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">First Name:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.firstName}">First Name</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Last Name:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.lastName}">Last Name</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Email:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.email}">Last Name</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Phone:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" th:text="${customer.phone}">Phone</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div th:if="${not #lists.isEmpty(accounts)}">
+                <h3>Accounts:</h3>
+                <table class="table table-striped">
+                    <tr>
+                       <th>#</th>
+                        <th>Balance</th>
+                    </tr>
+                    <tr th:each="account : ${accounts}">
+                        <td th:text="${account.id}"></td>
+                        <td th:text="${account.balance}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div th:if="${not #lists.isEmpty(recipients)}">
+                <h3>Recipients:</h3>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Account</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Description</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    <tr th:each="recipient : ${recipients}">
+                        <td th:text="${recipient.accountNumber}"></td>
+                        <td th:text="${recipient.name}"></td>
+                        <td th:text="${recipient.email}"></td>
+                        <td th:text="${recipient.phone}"></td>
+                        <td th:text="${recipient.description}"></td>
+                        <td><a class="btn btn-warning" th:href="@{'/customer/' + ${customer.id} + '/recipient/' + ${recipient.id} + '/edit'}">Edit</a></td>
+                        <td><a class="btn btn-danger" th:href="@{'/customer/' + ${customer.id} + '/recipient/' + ${recipient.id} + '/delete'}">Delete</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <a class="btn btn-success" th:href="@{'/customer/' + ${customer.id} + '/recipient/add'}">New Recipient</a>
+        <a class="btn btn-primary" th:href="@{/customer/list}">Customer List</a>
+    </div>
+</div>
+</body>
+</html>

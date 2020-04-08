@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+
+    <thymeleaf th:replace="header :: header" />
     <title>TEST BANK</title>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -30,6 +32,14 @@
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
+        .btn-danger:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
         body {
             background-color: rgba(230, 255, 255, 0.2);
             padding: 35px;
@@ -40,28 +50,36 @@
 <body>
 <h2>Create a new account:</h2>
 </tr>
+<div>
 <table class="table table-dark">
 
-    <form method="post" class="form" action="/javabank/customer/save">
+    <div th:replace="action :: action"></div>
+
+    <form method="post" class="form" th:object="${customer}" th:action="@{/customer}">
 
         <label for="firstName">First name:</label><br>
-        <input th:field="*{customer.firstName}" type="text" id="firstName" name="" value="Maria"><br>
+        <input th:field="*{firstName}" type="text" id="firstName" name="" ><br>
 
         <label for="lastName">Last name:</label><br>
-        <input th:field="*{customer.lastName}" type="text" id="lastName" name="" value="Batata"><br><br>
+        <input th:field="*{lastName}" type="text" id="lastName" name="" ><br><br>
 
         <label for="email">Email:</label><br>
-        <input th:field="*{customer.email}" type="text" id="email" name="email" value=""><br><br>
+        <input th:field="*{email}" type="text" id="email" name="email" ><br><br>
 
         <label for="phone">Phone:</label><br>
-        <input th:field="*{customer.phone}" type="phone" id="phone" name="phone" value=""><br><br>
+        <input th:field="*{phone}" type="phone" id="phone" name="phone" ><br><br>
 
         <input class="button button-submit" type="submit" value="Submit">
 
+        <div class="row">
+            <div class="col-sm-3">
+                <button type="submit" class="button btn-primary" name="action" value="save">Submit</button>
+                <button type="cancel" class="button btn-danger" name="action" value="cancel">Cancel</button>
+            </div>
+        </div>
     </form>
 </table>
-<a href="/javabank/customer/list"><button class="button button-test"><</button></a>
-
+</div>
 
 </body>
 </html>

@@ -57,4 +57,10 @@ public interface CustomerService {
     void update(Customer customer);
 
     Customer create(Customer customer);
+
+    void delete(Integer id);
+
+    void addRecipient(Integer cid, Recipient convert);
+
+    void removeRecipient(Integer cid, Integer id);
 }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <thymeleaf th:replace="header :: header" />
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="action :: action"></div>
+
+    <h2>Recipient Details</h2>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <form class="form-horizontal" th:object="${recipient}" th:action="@{'/customer/' + ${customer.id} + '/recipient'}" method="post">
+
+                <!-- since we are using same form for add and update,
+                  we need to bind id input field to customer object
+                  to avoid duplicating records on update -->
+                <input type="hidden" th:field="*{id}"/>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Account:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{accountNumber}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Name:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{name}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Email:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{email}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Phone:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{phone}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Description:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{description}"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <button type="submit" class="btn btn-primary"name="action" value="save">Submit</button>
+                        <button type="cancel" class="btn btn-danger" name="action" value="cancel">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

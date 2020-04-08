@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <thymeleaf th:replace="header :: header" />
     <title>JavaBank</title>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -50,6 +51,9 @@
 </head>
 <body>
 <div class="container">
+
+    <thymeleaf th:replace="header :: header" />
+
     <h2>Customer List</h2>
     <div th:if="${not #lists.isEmpty(customers)}">
         <table class="table table-striped">
@@ -74,7 +78,7 @@
                 <td><a th:href="@{'update/' + ${customer.id}}"><button type="button" class="button button-update">Update</button></a></td>
             </tr>
         </table>
-        <a href="/javabank/customer/create"><button class="button button-test">New client </button></a>
+        <a th:href="@{/customer/add}"><button class="button button-test">New client </button></a>
     </div>
 </div>
 </body>

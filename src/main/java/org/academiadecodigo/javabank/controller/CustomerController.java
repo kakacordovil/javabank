@@ -1,5 +1,10 @@
 package org.academiadecodigo.javabank.controller;
 
+import org.academiadecodigo.javabank.command.CustomerDto;
+import org.academiadecodigo.javabank.converters.AccountToAccountDto;
+import org.academiadecodigo.javabank.converters.CustomerDtoToCustomer;
+import org.academiadecodigo.javabank.converters.CustomerToCustomerDto;
+import org.academiadecodigo.javabank.converters.RecipientToRecipientDto;
 import org.academiadecodigo.javabank.persistence.model.Customer;
 import org.academiadecodigo.javabank.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +25,12 @@ public class CustomerController {
 
     private CustomerService customerService;
 
+    private CustomerToCustomerDto customerToCustomerDto;
+    private CustomerDtoToCustomer customerDtoToCustomer;
+    private RecipientToRecipientDto recipientToRecipientDto;
+    private AccountToAccountDto accountToAccountDto;
+
+
     /**
      * Sets the customer service
      *
@@ -28,6 +39,26 @@ public class CustomerController {
     @Autowired
     public void setCustomerService(CustomerService customerService) {
         this.customerService = customerService;
+    }
+
+    @Autowired
+    public void setCustomerToCustomerDto(CustomerToCustomerDto customerToCustomerDto) {
+        this.customerToCustomerDto = customerToCustomerDto;
+    }
+
+    @Autowired
+    public void setCustomerDtoToCustomer(CustomerDtoToCustomer customerDtoToCustomer) {
+        this.customerDtoToCustomer = customerDtoToCustomer;
+    }
+
+    @Autowired
+    public void setRecipientToRecipientDto(RecipientToRecipientDto recipientToRecipientDto) {
+        this.recipientToRecipientDto = recipientToRecipientDto;
+    }
+
+    @Autowired
+    public void setAccountToAccountDto(AccountToAccountDto accountToAccountDto) {
+        this.accountToAccountDto = accountToAccountDto;
     }
 
     /**
@@ -47,59 +78,49 @@ public class CustomerController {
                                @PathVariable Integer id){
 
         Customer customer = customerService.get(id);
-        model.addAttribute("customer", customer);
-        model.addAttribute("accounts", customer.getAccounts());
+        model.addAttribute("customer", customerToCustomerDto.convert(customer));
+        model.addAttribute("accounts", accountToAccountDto.convert(customer.getAccounts()));
+        model.addAttribute("recipients", recipientToRecipientDto.convert(customerService.listRecipients(id)));
         return "show-info";
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/delete/{id}")
-    public String delete(@PathVariable Integer id) {
-
-        customerService.deleteCustomer(id);
-        return "redirect:/";
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path = "/create")
-    public String create(Model model, @ModelAttribute("customer")  Customer customer) {
-
-//        Customer newCustomer = customerService.create(customer);
-        Customer newCustomer = new Customer();
-        model.addAttribute("customer", newCustomer);
-
-        return "create-customer";
-    }
-
-    @RequestMapping(method = RequestMethod.POST, path = {"/add"})
-    public String saveCustomer(Customer customer, RedirectAttributes redirectAttributes) {
-
-        Customer savedCustomer = customerService.save(customer);
-        redirectAttributes.addFlashAttribute("lastAction", "Added customer successfully!");
-        return "redirect:/customer/list";
-
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path = "/update/{id}")
-    public String update(Model model, @PathVariable Integer id) {
+    public String deleteCustomer(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
 
         Customer customer = customerService.get(id);
 
-        customer.setFirstName(customer.getFirstName());
-        customer.setLastName(customer.getLastName());
-        customer.setEmail(customer.getEmail());
-        customer.setPhone(customer.getPhone());
+        customerService.delete(id);
+        redirectAttributes.addFlashAttribute("lastAction", "Deleted " + customer.getFirstName() + " " + customer.getLastName());
+        return "redirect:/";
+    }
 
-        customerService.save(customer);
+    @RequestMapping(method = RequestMethod.GET, path = "/add")
+    public String addCustomer(Model model) {
 
-        model.addAttribute("customer", customer);
+        model.addAttribute("customer", new CustomerDto());
+
+        return "update-customer";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/update/{id}")
+    public String updateCustomer(Model model, @PathVariable Integer id) {
+
+        model.addAttribute("customer", customerToCustomerDto.convert(customerService.get(id)));
 
         return "update-customer";
 
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/save")
-    public String saveUpdate(@ModelAttribute("customer") Customer customer) {
+    @RequestMapping(method = RequestMethod.POST, path = {"/", ""}, params = "action=save")
+    public String saveUpdate(@ModelAttribute("customer") CustomerDto customerDto, RedirectAttributes redirectAttributes) {
 
-        customerService.update(customer);
+        Customer savedCustomer = customerService.save(customerDtoToCustomer.convert(customerDto));
+        redirectAttributes.addFlashAttribute("lastAction", "Saved " + savedCustomer.getFirstName() + " " + savedCustomer.getLastName());
+        return "redirect:/customer/list";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = {"/", ""}, params = "action=cancel")
+    public String cancelSaveCustomer() {
         return "redirect:/customer/list";
     }
 
