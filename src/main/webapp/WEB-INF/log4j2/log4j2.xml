@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ALL">
+    <Appenders>
+
+        <RollingFile name="AccessRollingFile" fileName="${sys:catalina.home}/logs/javabank/access/javabank_access.log"
+                     filePattern="${sys:catalina.home}/logs/javabank/access/$${date:yyyy}/$${date:MM}/javabank_access_%d{dd}.log"
+                     append="false">
+            <PatternLayout>
+                <Pattern>%d - %p - %c - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO"/>
+        </RollingFile>
+
+        <RollingFile name="ErrorRollingFile" fileName="${sys:catalina.home}/logs/javabank/error/javabank_error.log"
+                     filePattern="${sys:catalina.home}/logs/javabank/error/$${date:yyyy}/$${date:MM}/javabank_error_%d{dd}.log"
+                     append="false">
+            <PatternLayout>
+                <Pattern>%d [%t] - %p - %c - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="AccessRollingFile"/>
+            <AppenderRef ref="ErrorRollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

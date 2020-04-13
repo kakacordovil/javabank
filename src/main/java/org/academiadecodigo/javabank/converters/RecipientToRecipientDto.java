@@ -12,10 +12,9 @@ import org.springframework.stereotype.Component;
 public class RecipientToRecipientDto extends AbstractConverter<Recipient, RecipientDto> {
 
     /**
-     * Converts the recipient model object into a recipient dto object
-     *
+     * Converts the recipient model object into a recipient DTO
      * @param recipient the recipient
-     * @return the recipient form
+     * @return the recipient DTO
      */
     @Override
     public RecipientDto convert(Recipient recipient) {

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <thymeleaf th:replace="header :: header"/>
+
+    <style>
+        .btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn-info:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn-warning:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+    </style>
+
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="action :: action"></div>
+
+    <div th:replace="customer/partial/details :: details"></div>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <h3>Recipients:</h3>
+            <p>
+                <a class="btn btn-warning"
+                   th:disabled="${#lists.isEmpty(recipients) or #lists.isEmpty(accounts)}"
+                   th:href="${not #lists.isEmpty(recipients) and not #lists.isEmpty(accounts)} ? @{'/customer/' + ${customer.id} + '/recipient/transfer'}">Transfer</a>
+            </p>
+            <div th:if="${not #lists.isEmpty(recipients)}">
+                <table class="table table-striped">
+                    <tr>
+                        <th>Account</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Description</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    <tr th:each="recipient : ${recipients}">
+                        <td th:text="${recipient.accountNumber}"></td>
+                        <td th:text="${recipient.name}"></td>
+                        <td th:text="${recipient.email}"></td>
+                        <td th:text="${recipient.phone}"></td>
+                        <td th:text="${recipient.description}"></td>
+                        <td><a class="btn btn-warning"
+                               th:href="@{'/customer/' + ${customer.id} + '/recipient/' + ${recipient.id} + '/edit'}">Edit</a>
+                        </td>
+                        <td><a class="btn btn-danger"
+                               th:href="@{'/customer/' + ${customer.id} + '/recipient/' + ${recipient.id} + '/delete'}">Delete</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <a class="btn btn-success" th:href="@{'/customer/' + ${customer.id} + '/recipient/add'}">New Recipient</a>
+            <a class="btn btn-info" th:href="@{'/customer/' + ${customer.id}}">Customer Page</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

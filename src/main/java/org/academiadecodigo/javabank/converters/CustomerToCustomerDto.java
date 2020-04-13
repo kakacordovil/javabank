@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 public class CustomerToCustomerDto extends AbstractConverter<Customer, CustomerDto> {
 
     /**
-     * Converts the customer model object into a customer dto object
+     * Converts the customer model object into a customer DTO
      *
      * @param customer the customer
-     * @return the customer dto
+     * @return the customer DTO
      */
     @Override
     public CustomerDto convert(Customer customer) {

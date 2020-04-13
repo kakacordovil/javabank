@@ -1,13 +1,16 @@
 package org.academiadecodigo.javabank.factories;
 
+import org.academiadecodigo.javabank.errors.ErrorMessage;
 import org.academiadecodigo.javabank.persistence.model.account.Account;
 import org.academiadecodigo.javabank.persistence.model.account.AccountType;
 import org.academiadecodigo.javabank.persistence.model.account.CheckingAccount;
 import org.academiadecodigo.javabank.persistence.model.account.SavingsAccount;
+import org.springframework.stereotype.Component;
 
 /**
  * A factory for creating accounts of different types
  */
+@Component
 public class AccountFactory {
 
     /**
@@ -19,6 +22,7 @@ public class AccountFactory {
     public Account createAccount(AccountType accountType) {
 
         Account newAccount;
+
         switch (accountType) {
             case CHECKING:
                 newAccount = new CheckingAccount();
@@ -27,8 +31,7 @@ public class AccountFactory {
                 newAccount = new SavingsAccount();
                 break;
             default:
-                newAccount = null;
-
+                throw new IllegalArgumentException(ErrorMessage.TRANSACTION_INVALID);
         }
 
         return newAccount;

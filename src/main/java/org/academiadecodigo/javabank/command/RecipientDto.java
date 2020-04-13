@@ -2,29 +2,44 @@ package org.academiadecodigo.javabank.command;
 
 import org.academiadecodigo.javabank.persistence.model.Recipient;
 
+import javax.validation.constraints.*;
+
 /**
  * The {@link Recipient} data transfer object
  */
 public class RecipientDto {
 
     private Integer id;
+
+    @NotNull(message = "Account number is mandatory")
     private Integer accountNumber;
+
+    @NotNull(message = "Name is mandatory")
+    @NotBlank(message = "Name is mandatory")
+    @Size(min = 3, max = 64)
     private String name;
+
+    @Email
+    @NotBlank(message = "Email is mandatory")
     private String email;
+
+    @Pattern(regexp = "^\\+?[0-9]*$", message = "Phone number contains invalid characters")
+    @Size(min = 9, max = 16)
     private String phone;
+
     private String description;
 
     /**
-     * Gets the recipient dto id
+     * Gets the recipient DTO id
      *
-     * @return the recipient dto id
+     * @return the recipient DTO
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * Sets the recipient dto id
+     * Sets the recipient DTO id
      *
      * @param id the id to set
      */
@@ -33,16 +48,16 @@ public class RecipientDto {
     }
 
     /**
-     * Gets the recipient dto account number
+     * Gets the recipient DTO account number
      *
-     * @return the recipient dto account number
+     * @return the recipient DTO account number
      */
     public Integer getAccountNumber() {
         return accountNumber;
     }
 
     /**
-     * Sets the recipient dto account number
+     * Sets the recipient DTO account number
      *
      * @param accountNumber the account number to set
      */
@@ -51,16 +66,16 @@ public class RecipientDto {
     }
 
     /**
-     * Gets the recipient dto name
+     * Gets the recipient DTO name
      *
-     * @return the recipient dto name
+     * @return the recipient DTO name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Sets the recipient dto name
+     * Sets the recipient DTO name
      *
      * @param name the name to set
      */
@@ -69,16 +84,16 @@ public class RecipientDto {
     }
 
     /**
-     * Gets the recipient dto email
+     * Gets the recipient DTO name
      *
-     * @return the recipient dto email
+     * @return the recipient DTO email
      */
     public String getEmail() {
         return email;
     }
 
     /**
-     * Sets the recipient dto email
+     * Sets the recipient DTO email
      *
      * @param email the email to set
      */
@@ -87,16 +102,16 @@ public class RecipientDto {
     }
 
     /**
-     * Gets the recipient dto phone
+     * Gets the recipient DTO phone
      *
-     * @return the recipient dto phone
+     * @return the recipient DTO phone
      */
     public String getPhone() {
         return phone;
     }
 
     /**
-     * Sets the recipient dto email
+     * Sets the recipient DTO phone
      *
      * @param phone the phone to set
      */
@@ -105,18 +120,18 @@ public class RecipientDto {
     }
 
     /**
-     * Gets the recipient dto description
+     * Gets the recipient DTO description
      *
-     * @return the recipient dto description
+     * @return the recipient DTO description
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Sets the recipient dto description
+     * Sets the recipient DTO description
      *
-     * @param description the recipient dto description
+     * @param description the description to set
      */
     public void setDescription(String description) {
         this.description = description;
@@ -127,7 +142,7 @@ public class RecipientDto {
      */
     @Override
     public String toString() {
-        return "RecipientDto{" +
+        return "RecipientForm{" +
                 "id=" + id +
                 ", accountNumber=" + accountNumber +
                 ", name='" + name + '\'' +

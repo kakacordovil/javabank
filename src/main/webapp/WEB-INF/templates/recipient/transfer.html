@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <thymeleaf th:replace="header :: header"/>
+
+    <style>
+
+        .btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="action :: action"></div>
+
+    <h2>Recipient Transfer</h2>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <form class="form-horizontal" th:object="${transfer}"
+                  th:action="@{'/customer/' + ${customer.id} + '/recipient/transfer'}"
+                  method="post">
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Origin Account</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" th:field="*{srcId}">
+                            <option th:each="account : ${accounts}"
+                                    th:value="${account.id}"
+                                    th:text="'#' + ${account.id} + ' ' + ${account.type} + ' (Balance: ' + ${account.getBalance() + ')'}"/>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" th:if="${!recipients.isEmpty()}">
+                    <label class="col-sm-2 control-label">Recipient </label>
+                    <div class="col-sm-10">
+                        <select class="form-control" th:field="*{dstId}">
+                            <option th:each="recipient : ${recipients}"
+                                    th:value="${recipient.accountNumber}"
+                                    th:text="${recipient.name + ' (' + recipient.description + ')'}"/>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('amount')} ? has-error">
+                    <label class="col-sm-2 control-label">Amount</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" th:field="*{amount}"/>
+                        <span class="help-block" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount error messages</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Transfer</button>
+                <a class="btn btn-danger" th:href="@{'/customer/' + ${customer.id} + '/recipient'}">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

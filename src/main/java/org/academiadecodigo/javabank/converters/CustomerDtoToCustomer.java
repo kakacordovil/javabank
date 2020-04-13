@@ -26,9 +26,9 @@ public class CustomerDtoToCustomer implements Converter<CustomerDto, Customer> {
     }
 
     /**
-     * Converts the customer dto object into a customer model object
+     * Converts the customer DTO into a customer model object
      *
-     * @param customerDto the customer dto
+     * @param customerDto the customer DTO
      * @return the customer
      */
     @Override

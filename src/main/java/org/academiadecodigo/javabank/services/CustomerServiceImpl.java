@@ -1,5 +1,6 @@
 package org.academiadecodigo.javabank.services;
 
+import org.academiadecodigo.javabank.exceptions.*;
 import org.academiadecodigo.javabank.persistence.dao.AccountDao;
 import org.academiadecodigo.javabank.persistence.dao.CustomerDao;
 import org.academiadecodigo.javabank.persistence.dao.RecipientDao;
@@ -7,21 +8,14 @@ import org.academiadecodigo.javabank.persistence.model.AbstractModel;
 import org.academiadecodigo.javabank.persistence.model.Customer;
 import org.academiadecodigo.javabank.persistence.model.Recipient;
 import org.academiadecodigo.javabank.persistence.model.account.Account;
+import org.academiadecodigo.javabank.persistence.model.account.SavingsAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.academiadecodigo.javabank.errors.ErrorMessage.*;
-
-/**
- * An {@link CustomerService} implementation
- */
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -39,16 +33,25 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerDao = customerDao;
     }
 
+    /**
+     * Sets the recipient data access object
+     *
+     * @param recipientDao the recipient DAO to set
+     */
     @Autowired
     public void setRecipientDao(RecipientDao recipientDao) {
         this.recipientDao = recipientDao;
     }
 
+    /**
+     * Sets the account data access object
+     *
+     * @param accountDao the account DAO to set
+     */
     @Autowired
     public void setAccountDao(AccountDao accountDao) {
         this.accountDao = accountDao;
     }
-
 
     /**
      * @see CustomerService#get(Integer)
@@ -62,14 +65,40 @@ public class CustomerServiceImpl implements CustomerService {
      * @see CustomerService#getBalance(Integer)
      */
     @Override
-    public double getBalance(Integer id) {
+    public double getBalance(Integer id) throws CustomerNotFoundException {
 
         Customer customer = Optional.ofNullable(customerDao.findById(id))
-                .orElseThrow(() -> new IllegalArgumentException("Customer does not exist"));
+                .orElseThrow(CustomerNotFoundException::new);
 
         return customer.getAccounts().stream()
                 .mapToDouble(Account::getBalance)
                 .sum();
+    }
+
+    /**
+     * @see CustomerService#save(Customer)
+     */
+    @Transactional
+    @Override
+    public Customer save(Customer customer) {
+        return customerDao.saveOrUpdate(customer);
+    }
+
+    /**
+     * @see CustomerService#delete(Integer)
+     */
+    @Transactional
+    @Override
+    public void delete(Integer id) throws CustomerNotFoundException, AssociationExistsException {
+
+        Customer customer = Optional.ofNullable(customerDao.findById(id))
+                .orElseThrow(CustomerNotFoundException::new);
+
+        if (!customer.getAccounts().isEmpty()) {
+            throw new AssociationExistsException();
+        }
+
+        customerDao.delete(id);
     }
 
     /**
@@ -81,98 +110,111 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     /**
-     * @see CustomerService#listCustomerAccountIds(Integer)
-     */
-    @Override
-    public Set<Integer> listCustomerAccountIds(Integer id) {
-
-        Customer customer = Optional.ofNullable(customerDao.findById(id))
-                .orElseThrow(() -> new IllegalArgumentException("Customer does not exist"));
-
-        return customer.getAccounts().stream()
-                .map(AbstractModel::getId)
-                .collect(Collectors.toSet());
-    }
-
-    /**
      * @see CustomerService#listRecipients(Integer)
      */
     @Transactional(readOnly = true)
     @Override
-    public List<Recipient> listRecipients(Integer id) {
+    public List<Recipient> listRecipients(Integer id) throws CustomerNotFoundException {
 
         // check then act logic requires transaction,
         // event if read only
 
         Customer customer = Optional.ofNullable(customerDao.findById(id))
-                .orElseThrow(() -> new IllegalArgumentException("Customer does not exist"));
+                .orElseThrow(CustomerNotFoundException::new);
 
         return new ArrayList<>(customer.getRecipients());
     }
 
+    /**
+     * @see CustomerService#addRecipient(Integer, Recipient)
+     */
     @Transactional
     @Override
-    public void deleteCustomer(Integer id) {
-               customerDao.delete(id);
-    }
+    public Recipient addRecipient(Integer id, Recipient recipient) throws CustomerNotFoundException, AccountNotFoundException {
 
-    @Transactional
-    @Override
-    public Customer create(Customer customer) {
-        System.out.println("KAKA-CREATE-CallingSaveOrUpdate");
-
-        return customerDao.saveOrUpdate(customer);
-    }
-
-    @Transactional
-    @Override
-    public void delete(Integer id) {
-        customerDao.delete(id);
-    }
-
-    @Override
-    public void addRecipient(Integer id, Recipient recipient) {
         Customer customer = Optional.ofNullable(customerDao.findById(id))
-                .orElseThrow(() -> new IllegalArgumentException(CUSTOMER_NOT_FOUND));
+                .orElseThrow(CustomerNotFoundException::new);
 
         if (accountDao.findById(recipient.getAccountNumber()) == null ||
                 getAccountIds(customer).contains(recipient.getAccountNumber())) {
-            throw new IllegalArgumentException("Invalid account number");
+            throw new AccountNotFoundException();
         }
 
-        customer.addRecipient(recipient);
-        customerDao.saveOrUpdate(customer);
+        if (recipient.getId() == null) {
+            customer.addRecipient(recipient);
+            customerDao.saveOrUpdate(customer);
+        } else {
+            recipientDao.saveOrUpdate(recipient);
+        }
+        return customer.getRecipients().get(customer.getRecipients().size() - 1);
     }
 
+    /**
+     * @see CustomerService#removeRecipient(Integer, Integer)
+     */
+    @Transactional
     @Override
-    public void removeRecipient(Integer id, Integer recipientId) {
-        Customer customer = Optional.ofNullable(customerDao.findById(id))
-                .orElseThrow(() -> new IllegalArgumentException(CUSTOMER_NOT_FOUND));
+    public void removeRecipient(Integer id, Integer recipientId) throws CustomerNotFoundException, RecipientNotFoundException {
 
+        Customer customer = Optional.ofNullable(customerDao.findById(id))
+                .orElseThrow(CustomerNotFoundException::new);
 
         Recipient recipient = Optional.ofNullable(recipientDao.findById(recipientId))
-                .orElseThrow(() -> new IllegalArgumentException(RECIPIENT_NOT_FOUND));
+                .orElseThrow(RecipientNotFoundException::new);
 
-        if (!recipient.getCustomer().getId().equals(id)) {
-            throw new IllegalArgumentException(CUSTOMER_RECIPIENT_NOT_FOUND);
+        if (!customer.getRecipients().contains(recipient)) {
+            throw new RecipientNotFoundException();
         }
 
         customer.removeRecipient(recipient);
         customerDao.saveOrUpdate(customer);
     }
 
+    /**
+     * @see CustomerService#addAccount(Integer, Account)
+     */
     @Transactional
     @Override
-    public Customer save(Customer customer) {
-        System.out.println("KAKA-SAVE-CallingSaveOrUpdate");
+    public Account addAccount(Integer id, Account account) throws CustomerNotFoundException, TransactionInvalidException {
 
-        return customerDao.saveOrUpdate(customer);
+        Customer customer = Optional.ofNullable(customerDao.findById(id))
+                .orElseThrow(CustomerNotFoundException::new);
+
+        if (!account.canWithdraw() &&
+                account.getBalance() < SavingsAccount.MIN_BALANCE) {
+            throw new TransactionInvalidException();
+        }
+
+        customer.addAccount(account);
+        customerDao.saveOrUpdate(customer);
+
+        return customer.getAccounts().get(customer.getAccounts().size() - 1);
     }
 
+    /**
+     * @see CustomerService#closeAccount(Integer, Integer)
+     */
     @Transactional
     @Override
-    public void update(Customer customer) {
- System.out.println("KAKA-UPDATE-CallingSaveOrUpdate");
+    public void closeAccount(Integer id, Integer accountId)
+            throws CustomerNotFoundException, AccountNotFoundException, TransactionInvalidException {
+
+        Customer customer = Optional.ofNullable(customerDao.findById(id))
+                .orElseThrow(CustomerNotFoundException::new);
+
+        Account account = Optional.ofNullable(accountDao.findById(accountId))
+                .orElseThrow(AccountNotFoundException::new);
+
+        if (!account.getCustomer().getId().equals(id)) {
+            throw new AccountNotFoundException();
+        }
+
+        //different from 0 in case we later decide that negative values are acceptable
+        if (account.getBalance() != 0) {
+            throw new TransactionInvalidException();
+        }
+
+        customer.removeAccount(account);
         customerDao.saveOrUpdate(customer);
     }
 
@@ -184,3 +226,4 @@ public class CustomerServiceImpl implements CustomerService {
                 .collect(Collectors.toSet());
     }
 }
+

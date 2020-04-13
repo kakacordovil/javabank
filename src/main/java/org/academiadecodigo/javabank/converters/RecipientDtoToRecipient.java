@@ -26,10 +26,9 @@ public class RecipientDtoToRecipient implements Converter<RecipientDto, Recipien
     }
 
     /**
-     * Converts the recipient dto object into a recipient model object
-     *
-     * @param recipientDto the recipient dto
-     * @return the recipient object
+     * Converts the recipient DTO into a recipient model object
+     * @param recipientDto the recipient DTO
+     * @return the recipient
      */
     @Override
     public Recipient convert(RecipientDto recipientDto) {

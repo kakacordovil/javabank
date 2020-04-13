@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <thymeleaf th:replace="header :: header"/>
+
+    <script>
+
+        // attach click event handler to elements with account-deposit-modal class
+        $(document).on("click", ".account-deposit-modal", function () {
+
+            // fetch the value of the id attribute from the html element
+            var accountId = $(this).data('id');
+
+            // set the value on the form hidden id field
+            $("#deposit-account-id").val(accountId);
+        });
+
+        // attach click event handler to elements with account-withdraw-modal class
+        $(document).on("click", ".account-withdraw-modal", function () {
+
+            // fetch the value of the id attribute from the html element
+            var accountId = $(this).data('id');
+
+            // set the value on the form hidden id field
+            $("#withdraw-account-id").val(accountId);
+        });
+
+    </script>
+
+    <style>
+
+        .btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn-info:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div th:replace="action :: action"></div>
+
+    <div th:replace="customer/partial/details :: details"></div>
+
+    <div th:replace="customer/partial/account-list:: partial"></div>
+
+
+    <div class="row">
+        <div class="col-sm-8">
+            <a class="btn btn-primary" th:href="@{'/customer/' + ${customer.id} + '/recipient'}">Recipients</a>
+            <a class="btn btn-info" th:href="@{/customer/list}">Customer List</a>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="customer/modal/account :: modal"/>
+<div th:replace="customer/modal/transfer:: modal"/>
+<div th:replace="customer/modal/deposit :: modal"/>
+<div th:replace="customer/modal/withdraw:: modal"/>
+
+</body>
+</html>

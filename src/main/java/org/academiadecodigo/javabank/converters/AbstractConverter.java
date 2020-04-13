@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 /**
  * A generic converter to be used as a base for concrete converter implementations
+ *
  * @param <S> the source type
  * @param <T> the target type
  */

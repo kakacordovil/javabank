@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <thymeleaf th:replace="header :: header"/>
+    <meta charset="UTF-8">
+    <title>Transfer</title>
+
+    <style>
+
+        .btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+        }
+
+        button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+        }
+
+        closer:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+    </style>
+
+</head>
+<body>
+<div class="container" th:fragment="modal">
+
+    <div class="modal fade" id="account-transfer-modal" role="dialog">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Transfer</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <form class="form-horizontal"
+                          th:object="${transfer}"
+                          th:action="@{'/customer/' + ${customer.id} + '/transfer'}"
+                          method="post">
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Origin Account</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" th:field="*{srcId}">
+                                    <option th:each="account : ${accounts}"
+                                            th:value="${account.id}"
+                                            th:text="'#' + ${account.id} + ' ' + ${account.type} + '  (Balance: ' + ${account.balance + ')'}"/>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Destination Account</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" th:field="*{dstId}">
+                                    <option th:each="account : ${accounts}"
+                                            th:value="${account.id}"
+                                            th:text="'#' + ${account.id} + ' ' + ${account.type} + '  (Balance: ' + ${account.balance + ')'}"/>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Amount </label>
+                            <div class="col-sm-8">
+                                <input type="text" pattern="^\$?0*[1-9]\d*(\.\d{0,2})?|\d*(\.0[1-9])|\d*(\.[1-9]\d?)?$"
+                                       title="Not a valid amount" class="form-control" th:field="*{amount}"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-primary">Transfer</button>
+                                <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

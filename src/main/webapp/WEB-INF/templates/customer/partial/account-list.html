@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <thymeleaf th:replace="header :: header"/>
+    <meta charset="UTF-8">
+    <title>List</title>
+
+    <style>
+
+        .btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+        }
+
+        closer:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+        .btn-warning:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+    </style>
+</head>
+<body>
+
+<div th:fragment="partial">
+
+    <div class="row">
+        <div class="col-sm-8">
+            <h3>Accounts</h3>
+            <p>
+                <a class="btn btn-success" type="button" data-toggle="modal"
+                   data-target="#add-account-modal">Add</a>
+                <a class="btn btn-warning" type="button"
+                   data-target="#account-transfer-modal"
+                   th:attr="data-toggle=${#lists.size(accounts) > 1} ? 'modal'"
+                   th:disabled="${#lists.size(accounts) < 2}">Transfer</a>
+            </p>
+
+            <div th:if="${not #lists.isEmpty(accounts)}">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>#</th>
+                        <th>Balance</th>
+                        <th>Type</th>
+                        <th>Deposit</th>
+                        <th>Withdraw</th>
+                        <th>Close</th>
+                    </tr>
+                    <tr th:each="account : ${accounts}">
+                        <td th:text="${account.id}"></td>
+                        <td th:text="${account.balance}"></td>
+                        <td th:text="${account.type}"></td>
+
+                        <td><a id="deposit" class="btn btn-success account-deposit-modal" type="button"
+                               data-toggle="modal"
+                               data-target="#deposit-modal"
+                               th:attr="data-id=${account.id}">Deposit</a>
+
+                        <td><a id="withdraw" class="btn btn-warning account-withdraw-modal" type="button"
+                               data-target="#withdraw-modal"
+                               th:attr="data-toggle=${account.type.name() != 'SAVINGS'} ? 'modal'"
+                               th:disabled="${account.type.name() == 'SAVINGS'}"
+                               th:attrappend="data-id=${account.id}">Withdraw</a>
+
+                        <td><a class="btn btn-danger" type="button"
+                               th:href="@{'/customer/' + ${customer.id} + '/account/' + ${account.id} + '/close'}">Close</a>
+
+                    </tr>
+                    <tr>
+                        <th>Total:</th>
+                        <td th:text="${customerBalance}"></td>
+                        <td colspan="4" style="visibility: hidden"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>

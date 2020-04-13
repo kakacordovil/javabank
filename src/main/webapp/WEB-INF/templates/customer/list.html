@@ -2,17 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <thymeleaf th:replace="header :: header" />
-    <title>JavaBank</title>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          modelType="text/css"/>
-    <script modelType="application/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script modelType="application/javascript" async
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
     <style>
-        .button {
+        .btn {
             background-color: #4CAF50; /* Green */
             border: none;
             color: white;
@@ -27,32 +18,29 @@
             transition-duration: 0.4s;
         }
 
-        .button-test:hover {
+        .btn-success:hover {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
-        .button-view:hover {
+        btn-primary:hover {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
-        .button-delete:hover {
+        .btn-warning:hover {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
-        .button-update:hover {
+        .btn-danger:hover {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
         }
 
-        body {
-        background-color: rgba(230, 255, 255, 0.2);
-        }
+      </style>
 
-    </style>
 </head>
 <body>
 <div class="container">
 
-    <thymeleaf th:replace="header :: header" />
+    <div th:replace="action :: action"></div>
 
     <h2>Customer List</h2>
     <div th:if="${not #lists.isEmpty(customers)}">
@@ -64,8 +52,8 @@
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Show</th>
+                <th>Edit</th>
                 <th>Delete</th>
-                <th>Update</th>
             </tr>
             <tr th:each="customer : ${customers}">
                 <td th:text="${customer.id}"></td>
@@ -73,13 +61,18 @@
                 <td th:text="${customer.lastName}"></td>
                 <td th:text="${customer.email}"></td>
                 <td th:text="${customer.phone}"></td>
-                <td><a th:href="@{'show/' + ${customer.id}}"><button type="button" class="button button-view">View</button></a></td>
-                <td><a th:href="@{'delete/' + ${customer.id}}"><button type="button" class="button button-delete">Delete</button></a></td>
-                <td><a th:href="@{'update/' + ${customer.id}}"><button type="button" class="button button-update">Update</button></a></td>
+                <td><a class="btn btn-success" th:href="@{'/customer/' + ${customer.id}}">View</a></td>
+                <td><a class="btn btn-warning" th:href="@{'/customer/' + ${customer.id} + '/edit'}">Edit</a></td>
+                <td><a class="btn btn-danger" th:href="@{'/customer/' + ${customer.id} + '/delete'}">Delete</a></td>
             </tr>
         </table>
-        <a th:href="@{/customer/add}"><button class="button button-test">New client </button></a>
+
     </div>
+
+    <div class="col-sm-3">
+        <a class="btn btn-primary" th:href="@{/customer/add}">New Customer</a>
+    </div>
+
 </div>
 </body>
 </html>
